@@ -21,9 +21,9 @@ from util.FalconLogger import FalconLogger
 
 class SimConstants:
     simulate_gravity = True
-    arm_length = 0.3 # meters - to be estimated based on the actual mechanism, can also be calculated manually if you have the CAD model and know how to calculate it from MOI
-    arm_weight = 3.4 # kg - to be estimated based on the actual mechanism, can also be calculated manually if you have the CAD model and know how to calculate it from MOI
-
+    arm_length = 0.6 # meters - to be estimated based on the actual mechanism, can also be calculated manually if you have the CAD model and know how to calculate it from MOI
+    arm_weight = 0.6 # kg - to be estimated based on the actual mechanism, can also be calculated manually if you have the CAD model and know how to calculate it from MOI
+ntproperty("/SingleArmPivot/SimConstants/simulate_gravity", SimConstants.simulate_gravity)
 
 class PivotConstants:
     kP:float=0.0   # proportion       The farther away, the harder it pushes
@@ -32,7 +32,7 @@ class PivotConstants:
     kS:float=0.0    # static           The amount of force required to overcome static friction (friction while not moving)
     kG:float=0.0   # gravity          Constant force, but accounting for gravity - scales by rotation for pivots
 
-    gear_ratio:float=1/2 # rotor/mechanism (example shows one motor for 2 arm rotations, so 1/2)
+    gear_ratio:float=5/2 # rotor/mechanism (example shows 3 motor for 1 arm rotations, so 1/2)
 
     tolerance:degrees = 2 # example tolerance for being "at" the setpoint
 
