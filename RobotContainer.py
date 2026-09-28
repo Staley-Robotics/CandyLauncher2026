@@ -7,7 +7,7 @@ from commands2 import Command, cmd
 
 # Local Imports
 from subsystems import ExampleSubsystem, SingleArmPivot
-from commands import ExampleCommand
+from commands import ExampleCommand, PivotNTProperty, PivotArmReset, LaunchSingleArm
 from util import FalconXboxController
 
 class ControlMode(Enum):
@@ -28,20 +28,23 @@ class RobotContainer:
         Initializes RobotContainer
         """
         ## Config
-        control_mode = ControlMode.TEST
+        control_mode = ControlMode.DEMO
 
         # Driver Controller
-        driver1 = FalconXboxController( 0 )
+        self.driver1 = FalconXboxController( 0 )
 
         # Declare Subsystems
         launcher_arm = SingleArmPivot.TalonFXSingleArmPivot( 1, 2, 0, False)
 
         # Commands
+        self.pivot_to_ntproperty = PivotNTProperty(launcher_arm)
+        self.pivot_reset = PivotArmReset(launcher_arm)
+        self.launch = LaunchSingleArm(launcher_arm)
         # cmdSampleLeft = ExampleCommand(sysSample, driver1.getLeftX )
         # cmdSampleRight = ExampleCommand(sysSample, driver1.getRightX )
 
         # Default Commands
-        launcher_arm.setDefaultCommand( cmdSampleLeft )
+        # launcher_arm.setDefaultCommand( cmdSampleLeft )
 
         # Autonomous Chooser
         self.__autoChooser.setDefaultOption( "1 - None", cmd.none() )
@@ -65,7 +68,9 @@ class RobotContainer:
     def setControlsComp(self):
         pass
     def setControlsDemo(self):
-        pass
+        self.driver1.a().whileTrue(self.pivot_to_ntproperty)
+        self.driver1.povDown().onTrue(self.pivot_reset)
+        self.driver1.povUp().onTrue(self.launch)
 
     def getAutonomousCommand(self) -> Command:
         """
