@@ -22,8 +22,7 @@ from util.FalconLogger import FalconLogger
 class SimConstants:
     simulate_gravity = True
     arm_length = 0.6 # meters - to be estimated based on the actual mechanism, can also be calculated manually if you have the CAD model and know how to calculate it from MOI
-    arm_weight = .6 # kg - to be estimated based on the actual mechanism, can also be calculated manually if you have the CAD model and know how to calculate it from MOI
-
+    arm_weight = 0.6 # kg - to be estimated based on the actual mechanism, can also be calculated manually if you have the CAD model and know how to calculate it from MOI
 
 class PivotConstants:
     kP:float=0.0   # proportion       The farther away, the harder it pushes

@@ -6,7 +6,7 @@ from wpilib import SendableChooser, SmartDashboard
 from commands2 import Command, cmd
 
 # Local Imports
-from subsystems import ExampleSubsystem
+from subsystems import ExampleSubsystem, SingleArmPivot
 from commands import ExampleCommand
 from util import FalconXboxController
 
@@ -34,14 +34,14 @@ class RobotContainer:
         driver1 = FalconXboxController( 0 )
 
         # Declare Subsystems
-        sysSample = ExampleSubsystem( 0 )
+        launcher_arm = SingleArmPivot.TalonFXSingleArmPivot( 1, 2, 0, False)
 
         # Commands
-        cmdSampleLeft = ExampleCommand(sysSample, driver1.getLeftX )
-        cmdSampleRight = ExampleCommand(sysSample, driver1.getRightX )
+        # cmdSampleLeft = ExampleCommand(sysSample, driver1.getLeftX )
+        # cmdSampleRight = ExampleCommand(sysSample, driver1.getRightX )
 
         # Default Commands
-        sysSample.setDefaultCommand( cmdSampleLeft )
+        launcher_arm.setDefaultCommand( cmdSampleLeft )
 
         # Autonomous Chooser
         self.__autoChooser.setDefaultOption( "1 - None", cmd.none() )
