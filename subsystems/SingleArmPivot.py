@@ -25,10 +25,10 @@ class SimConstants:
     arm_weight = 0.6 # kg - to be estimated based on the actual mechanism, can also be calculated manually if you have the CAD model and know how to calculate it from MOI
 
 class PivotConstants:
-    kP:float=0.0   # proportion       The farther away, the harder it pushes
+    kP:float=20.0   # proportion       The farther away, the harder it pushes
     kI:float=0.0    # integral         The longer it's been off, the harder it pushes
     kD:float=0.0    # differential     The harder it pushes, the less it pushes :ROFL:
-    kS:float=0.0    # static           The amount of force required to overcome static friction (friction while not moving)
+    kS:float=0.1    # static           The amount of force required to overcome static friction (friction while not moving)
     kG:float=0.0   # gravity          Constant force, but accounting for gravity - scales by rotation for pivots
 
     gear_ratio:float= 5/2 # rotor/mechanism (example shows one motor for 2 arm rotations, so 1/2)
@@ -39,8 +39,8 @@ class TalonFXSingleArmPivot(Subsystem):
     class Positions:
         MIN:degrees = 0
         MAX:degrees = 90
-        UP:degrees = 90
-        START:degrees = UP
+        LAUNCH:degrees = 61.164
+        START:degrees = MIN
 
     def __init__(self, motor_id:int, encoder_id:int, encoder_offset:degrees, is_disabled:typing.Callable[[], bool]) -> None:
         # Setup Motor
@@ -108,7 +108,7 @@ class TalonFXSingleArmPivot(Subsystem):
         self.pivot_encoder.configurator.apply(encoder_config)
 
         ### PID Functionality Setup
-        self.pivot_request = PositionVoltage(position=0.0) # arg will be self.getPivotPosition() bc closed loop
+        self.pivot_request = PositionVoltage(self.get_pivot_position()) # arg will be self.getPivotPosition() bc closed loop
         self.disable_pivot = is_disabled
 
         # Logging
@@ -208,10 +208,10 @@ class TalonFXSingleArmPivot(Subsystem):
         ## Pivot
         # control position
         if not self.disable_pivot:
-            if abs(self.pivot_request.position * 360 - self.get_pivot_position()) > PivotConstants.tolerance:
+            if abs(self.pivot_request.position * 360 - self.get_pivot_position()) < PivotConstants.tolerance:
                 self.motor.set_control(VoltageOut(0.0)) # if within tol, do nothing
             else:
-                self.motor.set_control(self.pivot_request)
+                self.motor.set_control(self.pivot_request)#PositionVoltage(self.get_pivot_position()))
         else:
             self.motor.set_control(VoltageOut(0.0)) # if disabled, always do nothing
     
@@ -242,4 +242,4 @@ class TalonFXSingleArmPivot(Subsystem):
         Another way to determine if pivot at setpoints but through manual error calculation
         This may be faster (update earlier) than the closed loop error? idk
         """
-        return abs(self.getPivotPosition() - self.getPivotSetpoint()) < (PivotConstants.tolerance if override_tol == None else override_tol)
+        return abs(self.get_pivot_position() - self.get_pivot_setpoint()) < (PivotConstants.tolerance if override_tol == None else override_tol)

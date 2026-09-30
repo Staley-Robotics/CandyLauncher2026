@@ -34,12 +34,12 @@ class RobotContainer:
         self.driver1 = FalconXboxController( 0 )
 
         # Declare Subsystems
-        launcher_arm = SingleArmPivot.TalonFXSingleArmPivot( 1, 2, 0, False)
+        launcher_arm = SingleArmPivot.TalonFXSingleArmPivot( 1, 2, -0.456055, False)
 
         # Commands
-        self.pivot_to_ntproperty = PivotNTProperty(launcher_arm)
-        self.pivot_reset = PivotArmReset(launcher_arm)
-        self.launch = LaunchSingleArm(launcher_arm)
+        self.pivot_to_ntproperty = PivotNTProperty.PivotNTProperty(launcher_arm)
+        self.pivot_reset = PivotArmReset.ResetPivotArm(launcher_arm)
+        self.launch = LaunchSingleArm.LaunchSingleArm(launcher_arm)
         # cmdSampleLeft = ExampleCommand(sysSample, driver1.getLeftX )
         # cmdSampleRight = ExampleCommand(sysSample, driver1.getRightX )
 
